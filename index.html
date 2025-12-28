@@ -1126,7 +1126,7 @@
 
             // In a real implementation, this would make a request to your backend
             // For demo purposes, we'll simulate download
-            alert(`Downloading ${quality} video...\n\nNote: This is a demo. In a real application, this would download the Instagram video.\n\nBackend would process: ${url}`);
+         
             
             // Reset form
             setTimeout(() => {
@@ -1236,5 +1236,26 @@
         console.log(tips[Math.floor(Math.random() * tips.length)]);
         console.log('Instagram Video Downloader ready!');
     </script>
+        <!-- yahan aapka baaki HTML khatam hota hai -->
+
+    <script>
+    async function downloadVideo(quality) {
+        const url = document.getElementById("videoUrl").value;
+
+        if (url === "") {
+            alert("Instagram link paste karo");
+            return;
+        }
+
+        window.open(
+            "https://YOUR_BACKEND_URL/download?url=" + encodeURIComponent(url),
+            "_blank"
+        );
+    }
+
+    document.getElementById("downloadHD").onclick = () => downloadVideo("HD");
+    document.getElementById("downloadSD").onclick = () => downloadVideo("SD");
+    </script>
+
 </body>
 </html>
