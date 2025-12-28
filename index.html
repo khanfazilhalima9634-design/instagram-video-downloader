@@ -1077,13 +1077,53 @@
         }
 
         // Download video (simulated for demo)
-        function downloadVideo(quality) {
-            const url = videoUrlInput.value.trim();
-            if (!url) {
-                showError('Please enter an Instagram URL first');
-                return;
-            }
-            
+        async function downloadVideo(quality) {
+    const url = videoUrlInput.value.trim();
+
+    if (!url) {
+        showError('Please enter an Instagram URL first');
+        return;
+    }
+
+    try {
+        progressText.textContent = 'Fetching video...';
+
+        // ✅ REAL backend call
+        const response = await fetch('https://your-backend.com/download', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                instagramUrl: url,
+                quality: quality
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch video');
+        }
+
+        // ✅ Get video file
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+
+        // ✅ Auto download
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = `instagram-${quality}.mp4`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        window.URL.revokeObjectURL(downloadUrl);
+
+    } catch (error) {
+        showError('Download failed. Please try again later.');
+        console.error(error);
+    }
+}
+
             // In a real implementation, this would make a request to your backend
             // For demo purposes, we'll simulate download
             alert(`Downloading ${quality} video...\n\nNote: This is a demo. In a real application, this would download the Instagram video.\n\nBackend would process: ${url}`);
